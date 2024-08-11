@@ -3,6 +3,15 @@ import { executarComandoSQL } from "../databases/mysql";
 
 export class PersonRepository {
 
+    public static instance: PersonRepository;
+
+    public static getInstance() {
+        if(!PersonRepository.instance) {
+            PersonRepository.instance = new PersonRepository();
+        }
+        return PersonRepository.instance;
+    }
+
     constructor() {
         this.createTable();
     }
@@ -54,10 +63,21 @@ export class PersonRepository {
         }
     }
 
-    async findPerson(id: number): Promise<Person> {
+    async findPersonById(id: number): Promise<Person> {
         const query = 'SELECT * FROM Library.person WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    async findPersonByEmail(email:string): Promise<Person> {
+        const query = 'SELECT * FROM Library.person WHERE email = ?';
+        try {
+            const result = await executarComandoSQL(query, [email]);
             return result;
         } catch (err) {
             console.error(err);

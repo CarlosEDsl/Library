@@ -3,8 +3,8 @@ export class Person {
     private _name: string;
     private _email: string;
   
-    constructor(id: number, name: string, email: string) {
-      this._id = id;
+    constructor(name: string, email: string, id?: number) {
+      this._id = id || 0;
       this._name = name;
       this._email = email;
     }

@@ -77,3 +77,4 @@ export class UserController extends Controller {
             return fail(404, new BasicResponseDto("Error on search", err));
         }
     }
+}

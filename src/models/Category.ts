@@ -2,9 +2,9 @@ export class Category {
     private _id: number;
     private _name: string;
   
-    constructor(id: number, name: string) {
-      this._id = id;
-      this._name = name;
+    constructor(id?: number, name?: string) {
+      this._id = id || 0;
+      this._name = name || '';
     }
   
     get id(): number {

@@ -66,7 +66,7 @@ export class CategoryRepository {
         }
     }
 
-    async findCategory(id:number): Promise<Category> {
+    async findCategoryById(id:number): Promise<Category> {
         const query = 'SELECT * FROM Library.category where id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
@@ -77,6 +77,19 @@ export class CategoryRepository {
             throw err;
         }
     }
+
+    async findCategoryByName(name:string): Promise<Category> {
+        const query = 'SELECT * FROM Library.category where name = ?';
+        try {
+            const result = await executarComandoSQL(query, [name]);
+            return new Promise((resolve) => {
+                resolve(result[0]);
+            });
+        } catch(err) {
+            throw err;
+        }
+    }
+
 
     async findAllCategories(): Promise<Category> {
         const query = 'SELECT * FROM Library.category';
