@@ -44,7 +44,7 @@ export class PersonController extends Controller {
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
         try {
-            const deletedPerson = await this.personService.deletePerson(person.id);
+            const deletedPerson = await this.personService.deletePerson(person);
             return success(200, new BasicResponseDto("Successfully deleted", deletedPerson));
         } catch (err) {
             return fail(404, new BasicResponseDto("Error on delete", err));
@@ -66,12 +66,12 @@ export class PersonController extends Controller {
     }
 
     @Get("all")
-    async findAllPersons(
+    async findAllPerson(
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
         try {
-            const persons = await this.personService.getAllPersons();
+            const persons = await this.personService.getAllPerson();
             return success(200, new BasicResponseDto("Successfully found", persons));
         } catch (err) {
             return fail(404, new BasicResponseDto("Error on search", err));

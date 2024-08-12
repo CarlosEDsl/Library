@@ -6,14 +6,14 @@ export class PersonService {
     
     personRepository = PersonRepository.getInstance();
 
-    async createPerson(personDTO:PersonDTO) {
+    async registerPerson(personDTO:PersonDTO) {
         const person = this.dtoToPerson(personDTO);
         this.emailVerifier(person.email);
 
         return await this.personRepository.insertPerson(person);
     }
 
-    async updatePerson(person:Person) {
+    async editPerson(person:Person) {
         if((await this.personRepository.findPersonById(person.id)).email != person.email)
             this.emailVerifier(person.email);
 
