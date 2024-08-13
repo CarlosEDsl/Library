@@ -3,8 +3,8 @@ export class User {
     private _personId: number;
     private _password: string;
   
-    constructor(id: number, personId: number, password: string) {
-      this._id = id;
+    constructor(personId: number, password: string, id?: number) {
+      this._id = id || 0;
       this._personId = personId;
       this._password = password;
     }

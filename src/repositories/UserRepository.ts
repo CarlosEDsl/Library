@@ -3,6 +3,14 @@ import { executarComandoSQL } from "../databases/mysql";
 
 export class UserRepository {
 
+    public static instance:UserRepository;
+    public static getInstance() {
+        if(!UserRepository.instance) {
+            UserRepository.instance = new UserRepository();
+        }
+        return UserRepository.instance;
+    }
+
     constructor() {
         this.createTable();
     }
@@ -59,6 +67,17 @@ export class UserRepository {
         const query = 'SELECT * FROM Library.user WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    async findUserByPersonId(personId:number):Promise<User> {
+        const query = 'SELECT * FROM Library.user WHERE personId = ?';
+        try {
+            const result = await executarComandoSQL(query, [personId]);
             return result;
         } catch (err) {
             console.error(err);
