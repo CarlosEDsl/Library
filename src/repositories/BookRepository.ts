@@ -3,6 +3,14 @@ import { executarComandoSQL } from "../databases/mysql";
 
 export class BookRepository {
 
+    private static instance:BookRepository;
+    public static getInstance() {
+        if(!BookRepository.instance) {
+            BookRepository.instance = new BookRepository();
+        }
+        return BookRepository.instance;
+    }
+
     constructor() {
         this.createTable();
     }
@@ -56,10 +64,21 @@ export class BookRepository {
         }
     }
 
-    async findBook(id: number): Promise<Book> {
+    async findBookById(id: number): Promise<Book> {
         const query = 'SELECT * FROM Library.book WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    async findBookByAuthorAndName(author:string, title:string)  {
+        const query = 'SELECT * FROM Library.book WHERE author = ? AND title = ?';
+        try {
+            const result = await executarComandoSQL(query, [author, title]);
             return result;
         } catch (err) {
             console.error(err);

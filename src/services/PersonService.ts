@@ -16,6 +16,8 @@ export class PersonService {
     async editPerson(person:Person) {
         if((await this.personRepository.findPersonById(person.id)).email != person.email)
             this.emailVerifier(person.email);
+        if(!(await this.personRepository.findPersonById(person.id)))
+            throw new Error(`id: ${person.id} don't exist in persons`);
 
         return await this.personRepository.updatePerson(person);
     }

@@ -4,8 +4,8 @@ export class Book {
     private _author: string;
     private _categoryId: number;
   
-    constructor(id: number, title: string, author: string, categoryId: number) {
-      this._id = id;
+    constructor(title: string, author: string, categoryId: number, id?: number) {
+      this._id = id || 0;
       this._title = title;
       this._author = author;
       this._categoryId = categoryId;
