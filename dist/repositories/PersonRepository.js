@@ -81,7 +81,7 @@ class PersonRepository {
             const query = 'SELECT * FROM Library.person WHERE id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
-                return result;
+                return result[0];
             }
             catch (err) {
                 console.error(err);
@@ -94,7 +94,7 @@ class PersonRepository {
             const query = 'SELECT * FROM Library.person WHERE email = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [email]);
-                return result;
+                return result[0];
             }
             catch (err) {
                 console.error(err);

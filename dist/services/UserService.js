@@ -22,19 +22,22 @@ class UserService {
         return __awaiter(this, void 0, void 0, function* () {
             const user = this.dtoToUser(userDTO);
             try {
-                this.personVerifier(user.personId);
+                yield this.personVerifier(user.personId);
             }
             catch (err) {
                 throw err;
             }
-            return yield this.userRepository.updateUser(user);
+            return yield this.userRepository.insertUser(user);
         });
     }
     editUser(userDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const user = this.dtoToUser(userDTO);
+            user.id = (_a = userDTO.id) !== null && _a !== void 0 ? _a : 0;
             try {
-                this.personVerifier(user.personId);
+                if ((yield this.userRepository.findUser(user.id)).personId != user.personId)
+                    yield this.personVerifier(user.personId);
             }
             catch (err) {
                 throw err;
@@ -44,7 +47,9 @@ class UserService {
     }
     deleteUser(userDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const user = this.dtoToUser(userDTO);
+            user.id = (_a = userDTO.id) !== null && _a !== void 0 ? _a : 0;
             const deletePerson = yield this.userRepository.findUser(user.id);
             if (deletePerson.personId != user.personId || deletePerson.password != user.password) {
                 throw new Error("data don't match");
@@ -66,7 +71,7 @@ class UserService {
     }
     getAllUser() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.personRepository.findAllPersons();
+            return yield this.userRepository.findAllUsers();
         });
     }
     personVerifier(personId) {
@@ -74,7 +79,7 @@ class UserService {
             const person = yield this.personRepository.findPersonById(personId);
             if (!person)
                 throw new Error("this person don't exist");
-            if ((yield this.userRepository.findUser(personId)) != null)
+            if ((yield this.userRepository.findUserByPersonId(personId)) != null)
                 throw new Error("this person already have an user");
         });
     }

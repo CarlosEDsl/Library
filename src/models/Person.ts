@@ -1,5 +1,5 @@
 export class Person {
-    private _id: number;
+    private _id?: number;
     private _name: string;
     private _email: string;
   
@@ -10,7 +10,7 @@ export class Person {
     }
   
     get id(): number {
-      return this._id;
+      return this._id || 0;
     }
   
     set id(value: number) {

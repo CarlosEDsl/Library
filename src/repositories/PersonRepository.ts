@@ -67,7 +67,7 @@ export class PersonRepository {
         const query = 'SELECT * FROM Library.person WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;
@@ -78,7 +78,7 @@ export class PersonRepository {
         const query = 'SELECT * FROM Library.person WHERE email = ?';
         try {
             const result = await executarComandoSQL(query, [email]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;

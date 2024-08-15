@@ -8,7 +8,7 @@ class Person {
         this._email = email;
     }
     get id() {
-        return this._id;
+        return this._id || 0;
     }
     set id(value) {
         this._id = value;

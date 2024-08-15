@@ -13,7 +13,7 @@ export class CategoryService{
     async registerCategory(categoryDTO:CategoryDTO) {
         const category = this.dtoToCategory(categoryDTO);
         try{
-            this.nameVerification(category.name);
+            await this.nameVerification(category.name);
         } catch(err) {
             throw err;
         }
@@ -25,7 +25,7 @@ export class CategoryService{
     async editCategory(categoryDTO:CategoryDTO) {
         const category = this.dtoToCategory(categoryDTO);
         try{
-            this.nameVerification(category.name);
+            await this.nameVerification(category.name);
         } catch(err) {
             throw err;
         }

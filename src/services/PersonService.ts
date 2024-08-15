@@ -1,6 +1,7 @@
 import { PersonDTO } from "../models/dto/PersonDTO";
 import { Person } from "../models/Person";
 import { PersonRepository } from "../repositories/PersonRepository";
+import { isEqual } from "../utils.ts/objectsUtils";
 
 export class PersonService {
     
@@ -9,7 +10,7 @@ export class PersonService {
     async registerPerson(personDTO:PersonDTO) {
         const person = this.dtoToPerson(personDTO);
         try {
-            this.emailVerifier(person.email);
+            await this.emailVerifier(person.email);
         } catch(err) {
             throw err;
         }
@@ -19,10 +20,16 @@ export class PersonService {
 
     async editPerson(personDTO:PersonDTO) {
         const person = this.dtoToPerson(personDTO);
-        if((await this.personRepository.findPersonById(person.id)).email != person.email)
-            this.emailVerifier(person.email);
-        if(!(await this.personRepository.findPersonById(person.id)))
-            throw new Error(`id: ${person.id} don't exist in persons`);
+        person.id = personDTO.id?? 0;
+        try{
+            console.log(await this.personRepository.findPersonById(person.id));
+            if(!(await this.personRepository.findPersonById(person.id)))
+                throw new Error(`id: ${person.id} don't exist in persons`);
+            if((await this.personRepository.findPersonById(person.id)).email != person.email)
+                await this.emailVerifier(person.email);
+        } catch(err) {
+            throw err;
+        }
 
         return await this.personRepository.updatePerson(person);
     }
@@ -49,13 +56,13 @@ export class PersonService {
     }
 
     async emailVerifier(email:string) {
-        if(this.personRepository.findPersonByEmail(email) != null) {
+        if(await this.personRepository.findPersonByEmail(email)) {
             throw new Error("email already in use");
         }
     }
 
     dtoToPerson(dto:PersonDTO) {
-        return new Person(dto.email, dto.name);
+        return new Person(dto.name, dto.email);
     }
 
 }

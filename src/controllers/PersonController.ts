@@ -33,7 +33,7 @@ export class PersonController extends Controller {
             const updatedPerson = await this.personService.editPerson(person);
             return success(200, new BasicResponseDto("Successfully updated", updatedPerson));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Failed to update", undefined));
+            return fail(404, new BasicResponseDto("Failed to update: " + err, undefined));
         }
     }
 

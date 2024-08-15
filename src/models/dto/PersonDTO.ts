@@ -1,5 +1,5 @@
 export class PersonDTO {
-    id:number;
+    id?:number;
     name:string;
     email:string;
 

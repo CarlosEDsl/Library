@@ -24,9 +24,9 @@ class LoanService {
         return __awaiter(this, void 0, void 0, function* () {
             const loan = this.dtoToLoan(loanDTO);
             try {
-                this.bookVerifier(loan.bookId);
-                this.userVerifier(loan.userId);
-                this.dateVerifier(loan);
+                yield this.bookVerifier(loan.bookId);
+                yield this.userVerifier(loan.userId);
+                yield this.dateVerifier(loan);
             }
             catch (err) {
                 throw err;
@@ -40,9 +40,9 @@ class LoanService {
             if (!(yield this.loanRepository.findLoan(loan.id)))
                 throw new Error("this loan don't exist");
             try {
-                this.bookVerifier(loan.bookId);
-                this.userVerifier(loan.userId);
-                this.dateVerifier(loan);
+                yield this.bookVerifier(loan.bookId);
+                yield this.userVerifier(loan.userId);
+                yield this.dateVerifier(loan);
             }
             catch (err) {
                 throw err;

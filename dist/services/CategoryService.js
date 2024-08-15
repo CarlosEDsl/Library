@@ -20,7 +20,7 @@ class CategoryService {
         return __awaiter(this, void 0, void 0, function* () {
             const category = this.dtoToCategory(categoryDTO);
             try {
-                this.nameVerification(category.name);
+                yield this.nameVerification(category.name);
             }
             catch (err) {
                 throw err;
@@ -33,7 +33,7 @@ class CategoryService {
         return __awaiter(this, void 0, void 0, function* () {
             const category = this.dtoToCategory(categoryDTO);
             try {
-                this.nameVerification(category.name);
+                yield this.nameVerification(category.name);
             }
             catch (err) {
                 throw err;

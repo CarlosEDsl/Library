@@ -11,18 +11,20 @@ export class UserService {
     async registerUser(userDTO:UserDTO) {
         const user = this.dtoToUser(userDTO);
         try{
-            this.personVerifier(user.personId);
+            await this.personVerifier(user.personId);
         } catch(err) {
             throw err;
         }
 
-        return await this.userRepository.updateUser(user);        
+        return await this.userRepository.insertUser(user);        
     }
 
     async editUser(userDTO:UserDTO) {
         const user = this.dtoToUser(userDTO);
+        user.id = userDTO.id?? 0;
         try{
-            this.personVerifier(user.personId);
+            if((await this.userRepository.findUser(user.id)).personId != user.personId)
+                await this.personVerifier(user.personId);
         } catch(err) {
             throw err;
         }
@@ -31,6 +33,7 @@ export class UserService {
 
     async deleteUser(userDTO:UserDTO) {
         const user = this.dtoToUser(userDTO);
+        user.id = userDTO.id?? 0;
         const deletePerson = await this.userRepository.findUser(user.id);
         if(deletePerson.personId != user.personId || deletePerson.password != user.password) {
             throw new Error("data don't match");
@@ -49,7 +52,7 @@ export class UserService {
     }
 
     async getAllUser() {
-        return await this.personRepository.findAllPersons();
+        return await this.userRepository.findAllUsers();
     }
 
 
@@ -58,7 +61,7 @@ export class UserService {
         const person = await this.personRepository.findPersonById(personId);
         if (!person)
             throw new Error("this person don't exist");
-        if(await this.userRepository.findUser(personId) != null) 
+        if(await this.userRepository.findUserByPersonId(personId) != null)
             throw new Error("this person already have an user");   
     }
 

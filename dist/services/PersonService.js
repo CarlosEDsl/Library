@@ -20,7 +20,7 @@ class PersonService {
         return __awaiter(this, void 0, void 0, function* () {
             const person = this.dtoToPerson(personDTO);
             try {
-                this.emailVerifier(person.email);
+                yield this.emailVerifier(person.email);
             }
             catch (err) {
                 throw err;
@@ -30,11 +30,19 @@ class PersonService {
     }
     editPerson(personDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const person = this.dtoToPerson(personDTO);
-            if ((yield this.personRepository.findPersonById(person.id)).email != person.email)
-                this.emailVerifier(person.email);
-            if (!(yield this.personRepository.findPersonById(person.id)))
-                throw new Error(`id: ${person.id} don't exist in persons`);
+            person.id = (_a = personDTO.id) !== null && _a !== void 0 ? _a : 0;
+            try {
+                console.log(yield this.personRepository.findPersonById(person.id));
+                if (!(yield this.personRepository.findPersonById(person.id)))
+                    throw new Error(`id: ${person.id} don't exist in persons`);
+                if ((yield this.personRepository.findPersonById(person.id)).email != person.email)
+                    yield this.emailVerifier(person.email);
+            }
+            catch (err) {
+                throw err;
+            }
             return yield this.personRepository.updatePerson(person);
         });
     }
@@ -62,13 +70,13 @@ class PersonService {
     }
     emailVerifier(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.personRepository.findPersonByEmail(email) != null) {
+            if (yield this.personRepository.findPersonByEmail(email)) {
                 throw new Error("email already in use");
             }
         });
     }
     dtoToPerson(dto) {
-        return new Person_1.Person(dto.email, dto.name);
+        return new Person_1.Person(dto.name, dto.email);
     }
 }
 exports.PersonService = PersonService;

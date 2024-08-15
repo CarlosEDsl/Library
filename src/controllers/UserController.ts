@@ -33,7 +33,7 @@ export class UserController extends Controller {
             const updatedUser = await this.userService.editUser(user);
             return success(200, new BasicResponseDto("Successfully updated", updatedUser));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Failed to update", undefined));
+            return fail(404, new BasicResponseDto("Failed to update: " + err, undefined));
         }
     }
 
@@ -47,7 +47,7 @@ export class UserController extends Controller {
             const deletedUser = await this.userService.deleteUser(user);
             return success(200, new BasicResponseDto("Successfully deleted", deletedUser));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Error on delete", err));
+            return fail(404, new BasicResponseDto("Error on delete " + err, undefined));
         }
     }
 
@@ -61,7 +61,7 @@ export class UserController extends Controller {
             const user = await this.userService.findUser(id);
             return success(200, new BasicResponseDto("Successfully found", user));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Error on search", err));
+            return fail(404, new BasicResponseDto("Error on search " + err, undefined));
         }
     }
 
@@ -74,7 +74,7 @@ export class UserController extends Controller {
             const users = await this.userService.getAllUser();
             return success(200, new BasicResponseDto("Successfully found", users));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Error on search", err));
+            return fail(404, new BasicResponseDto("Error on search" + err, undefined));
         }
     }
 }

@@ -12,9 +12,9 @@ export class LoanService {
     async registerLoan(loanDTO:LoanDTO) {
         const loan = this.dtoToLoan(loanDTO);
         try{
-            this.bookVerifier(loan.bookId);
-            this.userVerifier(loan.userId);
-            this.dateVerifier(loan)
+            await this.bookVerifier(loan.bookId);
+            await this.userVerifier(loan.userId);
+            await this.dateVerifier(loan)
         } catch(err) {
             throw err;
         }
@@ -26,9 +26,9 @@ export class LoanService {
         const loan = this.dtoToLoan(loanDTO);
         if(!await this.loanRepository.findLoan(loan.id)) throw new Error("this loan don't exist");
         try {
-            this.bookVerifier(loan.bookId);
-            this.userVerifier(loan.userId);
-            this.dateVerifier(loan)
+            await this.bookVerifier(loan.bookId);
+            await this.userVerifier(loan.userId);
+            await this.dateVerifier(loan)
         } catch (err) {
             throw err;
         }

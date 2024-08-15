@@ -49,7 +49,7 @@ let PersonController = class PersonController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully updated", updatedPerson));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update", undefined));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update: " + err, undefined));
             }
         });
     }

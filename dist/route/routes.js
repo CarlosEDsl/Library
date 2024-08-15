@@ -48,7 +48,7 @@ const models = {
     "PersonDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": { "dataType": "double", "required": true },
+            "id": { "dataType": "double" },
             "name": { "dataType": "string", "required": true },
             "email": { "dataType": "string", "required": true },
         },

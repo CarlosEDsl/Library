@@ -67,7 +67,7 @@ export class UserRepository {
         const query = 'SELECT * FROM Library.user WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;
@@ -78,7 +78,7 @@ export class UserRepository {
         const query = 'SELECT * FROM Library.user WHERE personId = ?';
         try {
             const result = await executarComandoSQL(query, [personId]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;

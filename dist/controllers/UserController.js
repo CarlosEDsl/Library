@@ -49,7 +49,7 @@ let UserController = class UserController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully updated", updatedUser));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update", undefined));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update: " + err, undefined));
             }
         });
     }
@@ -60,7 +60,7 @@ let UserController = class UserController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", deletedUser));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on delete", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on delete " + err, undefined));
             }
         });
     }
@@ -71,7 +71,7 @@ let UserController = class UserController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", user));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search " + err, undefined));
             }
         });
     }
@@ -82,7 +82,7 @@ let UserController = class UserController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", users));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search" + err, undefined));
             }
         });
     }

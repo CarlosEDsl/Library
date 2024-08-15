@@ -82,7 +82,7 @@ class UserRepository {
             const query = 'SELECT * FROM Library.user WHERE id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
-                return result;
+                return result[0];
             }
             catch (err) {
                 console.error(err);
@@ -95,7 +95,7 @@ class UserRepository {
             const query = 'SELECT * FROM Library.user WHERE personId = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [personId]);
-                return result;
+                return result[0];
             }
             catch (err) {
                 console.error(err);
