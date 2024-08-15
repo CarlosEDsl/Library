@@ -25,7 +25,7 @@ class CategoryRepository {
         return __awaiter(this, void 0, void 0, function* () {
             const query = `CREATE TABLE IF NOT EXISTS Library.category (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL,
+            name VARCHAR(30) NOT NULL
             )`;
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, []);
@@ -86,7 +86,7 @@ class CategoryRepository {
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
                 return new Promise((resolve) => {
-                    resolve(result);
+                    resolve(result[0]);
                 });
             }
             catch (err) {

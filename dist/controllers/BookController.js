@@ -26,7 +26,6 @@ const tsoa_1 = require("tsoa");
 const BookDTO_1 = require("../models/dto/BookDTO");
 const BookService_1 = require("../services/BookService");
 const BasicResponseDTO_1 = require("../models/dto/BasicResponseDTO");
-const Book_1 = require("../models/Book");
 let BookController = class BookController extends tsoa_1.Controller {
     constructor() {
         super(...arguments);
@@ -39,6 +38,7 @@ let BookController = class BookController extends tsoa_1.Controller {
                 return success(201, new BasicResponseDTO_1.BasicResponseDto("Successfully created", newBook));
             }
             catch (err) {
+                console.error("Error in createBook:", err.message);
                 return fail(400, new BasicResponseDTO_1.BasicResponseDto(err.message, undefined));
             }
         });
@@ -50,18 +50,20 @@ let BookController = class BookController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully updated", updatedBook));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update", undefined));
+                console.error("Error in updateBook:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto(err.message, undefined));
             }
         });
     }
     deleteBook(book, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedBook = yield this.bookService.deleteBook(book.id);
-                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", deletedBook));
+                yield this.bookService.deleteBook(book);
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", undefined));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on delete", err));
+                console.error("Error in deleteBook:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto(err.message, undefined));
             }
         });
     }
@@ -69,21 +71,26 @@ let BookController = class BookController extends tsoa_1.Controller {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const book = yield this.bookService.findBook(id);
+                if (!book) {
+                    return fail(404, new BasicResponseDTO_1.BasicResponseDto("Book not found", undefined));
+                }
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", book));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+                console.error("Error in findBook:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err.message));
             }
         });
     }
     findAllBooks(success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const books = yield this.bookService.getAllBooks();
+                const books = yield this.bookService.getAllBook();
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", books));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+                console.error("Error in findAllBooks:", err);
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err.message));
             }
         });
     }
@@ -104,7 +111,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Book_1.Book, Function, Function]),
+    __metadata("design:paramtypes", [BookDTO_1.BookDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "updateBook", null);
 __decorate([
@@ -113,7 +120,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Book_1.Book, Function, Function]),
+    __metadata("design:paramtypes", [BookDTO_1.BookDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], BookController.prototype, "deleteBook", null);
 __decorate([

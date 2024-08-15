@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonRepository = void 0;
 const mysql_1 = require("../databases/mysql");
 class PersonRepository {
+    static getInstance() {
+        if (!PersonRepository.instance) {
+            PersonRepository.instance = new PersonRepository();
+        }
+        return PersonRepository.instance;
+    }
     constructor() {
         this.createTable();
     }
@@ -70,11 +76,24 @@ class PersonRepository {
             }
         });
     }
-    findPerson(id) {
+    findPersonById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = 'SELECT * FROM Library.person WHERE id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
+                return result;
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+    }
+    findPersonByEmail(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM Library.person WHERE email = ?';
+            try {
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [email]);
                 return result;
             }
             catch (err) {

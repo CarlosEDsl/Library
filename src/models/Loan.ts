@@ -5,8 +5,8 @@ export class Loan {
     private _loanDate: Date;
     private _returnDate: Date;
   
-    constructor(id: number, bookId: number, userId: number, loanDate: Date, returnDate: Date) {
-      this._id = id;
+    constructor(bookId: number, userId: number, loanDate: Date, returnDate: Date, id?: number) {
+      this._id = id || 0;
       this._bookId = bookId;
       this._userId = userId;
       this._loanDate = loanDate;

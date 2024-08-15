@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Res, Route, Tags, TsoaResponse } from "tsoa";
+import { Body, Controller, Delete, Get, Path, Post, Put, Res, Route, Tags, Tsoa, TsoaResponse } from "tsoa";
 import { LoanDTO } from "../models/dto/LoanDTO";
 import { LoanService } from "../services/LoanService";
 import { BasicResponseDto } from "../models/dto/BasicResponseDTO";
@@ -26,7 +26,7 @@ export class LoanController extends Controller {
     @Put("{id}")
     async updateLoan(
         @Path() id: number,
-        @Body() loan: Loan,
+        @Body() loan: LoanDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
@@ -41,12 +41,12 @@ export class LoanController extends Controller {
 
     @Delete("{id}")
     async deleteLoan(
-        @Path() id: number,
+        @Body() loan:LoanDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
         try {
-            await this.loanService.deleteLoan(id);
+            await this.loanService.deleteLoan(loan);
             return success(200, new BasicResponseDto("Successfully deleted", undefined));
         } catch (err) {
             return fail(404, new BasicResponseDto("Error on delete", err));
@@ -73,10 +73,24 @@ export class LoanController extends Controller {
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
         try {
-            const loans = await this.loanService.getAllLoans();
+            const loans = await this.loanService.getAllLoan();
             return success(200, new BasicResponseDto("Successfully found", loans));
         } catch (err) {
             return fail(404, new BasicResponseDto("Error on search", err));
+        }
+    }
+
+    @Get(`book/{id}`)
+    async findByAllByBook(
+        @Path() id:number,
+        @Res() success: TsoaResponse<200, BasicResponseDto>,
+        @Res() fail: TsoaResponse<404, BasicResponseDto>
+    ): Promise<void> {
+        try {
+            const loans = await this.loanService.getAllFromBook(id);
+            return success(200, new BasicResponseDto("all loans from this book", loans));
+        } catch(err) {
+            return fail(404, new BasicResponseDto("error: ", err));
         }
     }
 }

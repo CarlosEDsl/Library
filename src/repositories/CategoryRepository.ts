@@ -18,7 +18,7 @@ export class CategoryRepository {
     private async createTable(){
         const query = `CREATE TABLE IF NOT EXISTS Library.category (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(30) NOT NULL,
+            name VARCHAR(30) NOT NULL
             )`
         try{
             const result = await executarComandoSQL(query, []);
@@ -71,7 +71,7 @@ export class CategoryRepository {
         try {
             const result = await executarComandoSQL(query, [id]);
             return new Promise((resolve) => {
-                resolve(result);
+                resolve(result[0]);
             });
         } catch(err) {
             throw err;

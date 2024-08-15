@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonDTO = void 0;
 class PersonDTO {
-    constructor(name, email) {
+    constructor(id, name, email) {
+        this.id = id || 0;
         this.name = name || '';
         this.email = email || '';
     }

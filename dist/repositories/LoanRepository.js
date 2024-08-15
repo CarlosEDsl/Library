@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LoanRepository = void 0;
 const mysql_1 = require("../databases/mysql");
 class LoanRepository {
+    static getInstance() {
+        if (!LoanRepository.instance) {
+            LoanRepository.instance = new LoanRepository();
+        }
+        return LoanRepository.instance;
+    }
     constructor() {
         this.createTable();
     }
@@ -79,6 +85,32 @@ class LoanRepository {
             const query = 'SELECT * FROM Library.loan WHERE id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
+                return result;
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+    }
+    findLoanByBookId(bookId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM Library.loan WHERE bookId = ?';
+            try {
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [bookId]);
+                return result;
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+    }
+    findLoanByUserId(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM Library.loan WHERE userId = ?';
+            try {
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [userId]);
                 return result;
             }
             catch (err) {

@@ -26,7 +26,6 @@ const tsoa_1 = require("tsoa");
 const PersonDTO_1 = require("../models/dto/PersonDTO");
 const PersonService_1 = require("../services/PersonService");
 const BasicResponseDTO_1 = require("../models/dto/BasicResponseDTO");
-const Person_1 = require("../models/Person");
 let PersonController = class PersonController extends tsoa_1.Controller {
     constructor() {
         super(...arguments);
@@ -57,7 +56,7 @@ let PersonController = class PersonController extends tsoa_1.Controller {
     deletePerson(person, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedPerson = yield this.personService.deletePerson(person.id);
+                const deletedPerson = yield this.personService.deletePerson(person);
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", deletedPerson));
             }
             catch (err) {
@@ -76,10 +75,10 @@ let PersonController = class PersonController extends tsoa_1.Controller {
             }
         });
     }
-    findAllPersons(success, fail) {
+    findAllPerson(success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const persons = yield this.personService.getAllPersons();
+                const persons = yield this.personService.getAllPerson();
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", persons));
             }
             catch (err) {
@@ -104,7 +103,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Person_1.Person, Function, Function]),
+    __metadata("design:paramtypes", [PersonDTO_1.PersonDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], PersonController.prototype, "updatePerson", null);
 __decorate([
@@ -113,7 +112,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Person_1.Person, Function, Function]),
+    __metadata("design:paramtypes", [PersonDTO_1.PersonDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], PersonController.prototype, "deletePerson", null);
 __decorate([
@@ -132,7 +131,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Function, Function]),
     __metadata("design:returntype", Promise)
-], PersonController.prototype, "findAllPersons", null);
+], PersonController.prototype, "findAllPerson", null);
 exports.PersonController = PersonController = __decorate([
     (0, tsoa_1.Route)("person"),
     (0, tsoa_1.Tags)("Person")

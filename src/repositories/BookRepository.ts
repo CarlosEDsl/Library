@@ -68,7 +68,7 @@ export class BookRepository {
         const query = 'SELECT * FROM Library.book WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;
@@ -76,10 +76,10 @@ export class BookRepository {
     }
 
     async findBookByAuthorAndName(author:string, title:string)  {
-        const query = 'SELECT * FROM Library.book WHERE author = ? AND title = ?';
+        const query = 'SELECT * FROM Library.book WHERE author=? AND title=?';
         try {
             const result = await executarComandoSQL(query, [author, title]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;

@@ -9,18 +9,28 @@ export class UserService {
     personRepository:PersonRepository = PersonRepository.getInstance();
 
     async registerUser(userDTO:UserDTO) {
-        const user = await this.dtoToUser(userDTO);
-        this.personVerifier(user.personId);
+        const user = this.dtoToUser(userDTO);
+        try{
+            this.personVerifier(user.personId);
+        } catch(err) {
+            throw err;
+        }
 
         return await this.userRepository.updateUser(user);        
     }
 
-    async editUser(user:User) {
-        this.personVerifier(user.personId);
+    async editUser(userDTO:UserDTO) {
+        const user = this.dtoToUser(userDTO);
+        try{
+            this.personVerifier(user.personId);
+        } catch(err) {
+            throw err;
+        }
         return await this.userRepository.updateUser(user);
     }
 
-    async deleteUser(user:User) {
+    async deleteUser(userDTO:UserDTO) {
+        const user = this.dtoToUser(userDTO);
         const deletePerson = await this.userRepository.findUser(user.id);
         if(deletePerson.personId != user.personId || deletePerson.password != user.password) {
             throw new Error("data don't match");
@@ -38,7 +48,7 @@ export class UserService {
         return user;
     }
 
-    async getAllPerson() {
+    async getAllUser() {
         return await this.personRepository.findAllPersons();
     }
 
@@ -52,7 +62,7 @@ export class UserService {
             throw new Error("this person already have an user");   
     }
 
-    async dtoToUser(dto:UserDTO) {
+    dtoToUser(dto:UserDTO) {
         const user = new User(dto.personId, dto.password);
         return user;
     }

@@ -25,7 +25,7 @@ export class UserController extends Controller {
 
     @Put()
     async updateUser(
-        @Body() user: User,
+        @Body() user: UserDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
@@ -39,12 +39,12 @@ export class UserController extends Controller {
 
     @Delete()
     async deleteUser(
-        @Body() user: User,
+        @Body() user: UserDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
         try {
-            const deletedUser = await this.userService.deleteUser(user.id);
+            const deletedUser = await this.userService.deleteUser(user);
             return success(200, new BasicResponseDto("Successfully deleted", deletedUser));
         } catch (err) {
             return fail(404, new BasicResponseDto("Error on delete", err));
@@ -71,7 +71,7 @@ export class UserController extends Controller {
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise< | void>{
         try {
-            const users = await this.userService.getAllUsers();
+            const users = await this.userService.getAllUser();
             return success(200, new BasicResponseDto("Successfully found", users));
         } catch (err) {
             return fail(404, new BasicResponseDto("Error on search", err));

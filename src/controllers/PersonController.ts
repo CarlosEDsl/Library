@@ -25,7 +25,7 @@ export class PersonController extends Controller {
 
     @Put()
     async updatePerson(
-        @Body() person: Person,
+        @Body() person: PersonDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
@@ -39,7 +39,7 @@ export class PersonController extends Controller {
 
     @Delete()
     async deletePerson(
-        @Body() person: Person,
+        @Body() person: PersonDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {

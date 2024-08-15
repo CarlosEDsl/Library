@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Book = void 0;
 class Book {
-    constructor(id, title, author, categoryId) {
-        this._id = id;
+    constructor(title, author, categoryId, id) {
+        this._id = id || 0;
         this._title = title;
         this._author = author;
         this._categoryId = categoryId;

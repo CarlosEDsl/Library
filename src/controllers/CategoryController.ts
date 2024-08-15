@@ -25,7 +25,7 @@ export class CategoryController extends Controller{
 
     @Put()
     async updateCategory(
-        @Body() category:Category,
+        @Body() category:CategoryDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise< | void> {
@@ -39,7 +39,7 @@ export class CategoryController extends Controller{
 
     @Delete()
     async deleteCategory(
-        @Body() category:Category,
+        @Body() category:CategoryDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise< | void> {

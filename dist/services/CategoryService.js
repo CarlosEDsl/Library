@@ -19,7 +19,12 @@ class CategoryService {
     registerCategory(categoryDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const category = this.dtoToCategory(categoryDTO);
-            this.nameVerification(category.name);
+            try {
+                this.nameVerification(category.name);
+            }
+            catch (err) {
+                throw err;
+            }
             const newCategory = yield this.categoryRepository.insertCategory(category);
             return newCategory;
         });
@@ -27,7 +32,12 @@ class CategoryService {
     editCategory(categoryDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const category = this.dtoToCategory(categoryDTO);
-            this.nameVerification(category.name);
+            try {
+                this.nameVerification(category.name);
+            }
+            catch (err) {
+                throw err;
+            }
             const editedCategory = yield this.categoryRepository.updateCategory(category);
             return editedCategory;
         });

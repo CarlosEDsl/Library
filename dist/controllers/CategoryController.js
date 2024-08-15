@@ -26,7 +26,6 @@ const tsoa_1 = require("tsoa");
 const CategoryDTO_1 = require("../models/dto/CategoryDTO");
 const CategoryService_1 = require("../services/CategoryService");
 const BasicResponseDTO_1 = require("../models/dto/BasicResponseDTO");
-const Category_1 = require("../models/Category");
 let CategoryController = class CategoryController extends tsoa_1.Controller {
     constructor() {
         super(...arguments);
@@ -104,7 +103,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Category_1.Category, Function, Function]),
+    __metadata("design:paramtypes", [CategoryDTO_1.CategoryDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "updateCategory", null);
 __decorate([
@@ -113,7 +112,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Category_1.Category, Function, Function]),
+    __metadata("design:paramtypes", [CategoryDTO_1.CategoryDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], CategoryController.prototype, "deleteCategory", null);
 __decorate([

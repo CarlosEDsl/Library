@@ -3,6 +3,14 @@ import { executarComandoSQL } from "../databases/mysql";
 
 export class LoanRepository {
 
+    private static instance:LoanRepository;
+    public static getInstance() {
+        if(!LoanRepository.instance){
+            LoanRepository.instance = new LoanRepository();
+        }
+        return LoanRepository.instance;
+    }
+
     constructor() {
         this.createTable();
     }
@@ -62,6 +70,28 @@ export class LoanRepository {
         const query = 'SELECT * FROM Library.loan WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    async findLoanByBookId(bookId: number): Promise<Loan[]> {
+        const query = 'SELECT * FROM Library.loan WHERE bookId = ?';
+        try {
+            const result = await executarComandoSQL(query, [bookId]);
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
+    async findLoanByUserId(userId: number): Promise<Loan[]> {
+        const query = 'SELECT * FROM Library.loan WHERE userId = ?';
+        try {
+            const result = await executarComandoSQL(query, [userId]);
             return result;
         } catch (err) {
             console.error(err);

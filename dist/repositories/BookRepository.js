@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookRepository = void 0;
 const mysql_1 = require("../databases/mysql");
 class BookRepository {
+    static getInstance() {
+        if (!BookRepository.instance) {
+            BookRepository.instance = new BookRepository();
+        }
+        return BookRepository.instance;
+    }
     constructor() {
         this.createTable();
     }
@@ -72,12 +78,25 @@ class BookRepository {
             }
         });
     }
-    findBook(id) {
+    findBookById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const query = 'SELECT * FROM Library.book WHERE id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
-                return result;
+                return result[0];
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+    }
+    findBookByAuthorAndName(author, title) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM Library.book WHERE author=? AND title=?';
+            try {
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [author, title]);
+                return result[0];
             }
             catch (err) {
                 console.error(err);

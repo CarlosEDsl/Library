@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Loan = void 0;
 class Loan {
-    constructor(id, bookId, userId, loanDate, returnDate) {
-        this._id = id;
+    constructor(bookId, userId, loanDate, returnDate, id) {
+        this._id = id || 0;
         this._bookId = bookId;
         this._userId = userId;
         this._loanDate = loanDate;

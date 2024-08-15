@@ -26,7 +26,6 @@ const tsoa_1 = require("tsoa");
 const LoanDTO_1 = require("../models/dto/LoanDTO");
 const LoanService_1 = require("../services/LoanService");
 const BasicResponseDTO_1 = require("../models/dto/BasicResponseDTO");
-const Loan_1 = require("../models/Loan");
 let LoanController = class LoanController extends tsoa_1.Controller {
     constructor() {
         super(...arguments);
@@ -55,10 +54,10 @@ let LoanController = class LoanController extends tsoa_1.Controller {
             }
         });
     }
-    deleteLoan(id, success, fail) {
+    deleteLoan(loan, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield this.loanService.deleteLoan(id);
+                yield this.loanService.deleteLoan(loan);
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", undefined));
             }
             catch (err) {
@@ -80,11 +79,22 @@ let LoanController = class LoanController extends tsoa_1.Controller {
     findAllLoans(success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const loans = yield this.loanService.getAllLoans();
+                const loans = yield this.loanService.getAllLoan();
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", loans));
             }
             catch (err) {
                 return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+            }
+        });
+    }
+    findByAllByBook(id, success, fail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const loans = yield this.loanService.getAllFromBook(id);
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("all loans from this book", loans));
+            }
+            catch (err) {
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error: ", err));
             }
         });
     }
@@ -106,16 +116,16 @@ __decorate([
     __param(2, (0, tsoa_1.Res)()),
     __param(3, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Loan_1.Loan, Function, Function]),
+    __metadata("design:paramtypes", [Number, LoanDTO_1.LoanDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], LoanController.prototype, "updateLoan", null);
 __decorate([
     (0, tsoa_1.Delete)("{id}"),
-    __param(0, (0, tsoa_1.Path)()),
+    __param(0, (0, tsoa_1.Body)()),
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Function, Function]),
+    __metadata("design:paramtypes", [LoanDTO_1.LoanDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], LoanController.prototype, "deleteLoan", null);
 __decorate([
@@ -135,6 +145,15 @@ __decorate([
     __metadata("design:paramtypes", [Function, Function]),
     __metadata("design:returntype", Promise)
 ], LoanController.prototype, "findAllLoans", null);
+__decorate([
+    (0, tsoa_1.Get)(`book/{id}`),
+    __param(0, (0, tsoa_1.Path)()),
+    __param(1, (0, tsoa_1.Res)()),
+    __param(2, (0, tsoa_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Function, Function]),
+    __metadata("design:returntype", Promise)
+], LoanController.prototype, "findByAllByBook", null);
 exports.LoanController = LoanController = __decorate([
     (0, tsoa_1.Route)("loans"),
     (0, tsoa_1.Tags)("Loan")

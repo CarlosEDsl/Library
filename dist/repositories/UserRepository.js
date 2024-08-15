@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRepository = void 0;
 const mysql_1 = require("../databases/mysql");
 class UserRepository {
+    static getInstance() {
+        if (!UserRepository.instance) {
+            UserRepository.instance = new UserRepository();
+        }
+        return UserRepository.instance;
+    }
     constructor() {
         this.createTable();
     }
@@ -76,6 +82,19 @@ class UserRepository {
             const query = 'SELECT * FROM Library.user WHERE id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [id]);
+                return result;
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+    }
+    findUserByPersonId(personId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM Library.user WHERE personId = ?';
+            try {
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [personId]);
                 return result;
             }
             catch (err) {

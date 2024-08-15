@@ -8,12 +8,17 @@ export class PersonService {
 
     async registerPerson(personDTO:PersonDTO) {
         const person = this.dtoToPerson(personDTO);
-        this.emailVerifier(person.email);
+        try {
+            this.emailVerifier(person.email);
+        } catch(err) {
+            throw err;
+        }
 
         return await this.personRepository.insertPerson(person);
     }
 
-    async editPerson(person:Person) {
+    async editPerson(personDTO:PersonDTO) {
+        const person = this.dtoToPerson(personDTO);
         if((await this.personRepository.findPersonById(person.id)).email != person.email)
             this.emailVerifier(person.email);
         if(!(await this.personRepository.findPersonById(person.id)))
@@ -22,7 +27,8 @@ export class PersonService {
         return await this.personRepository.updatePerson(person);
     }
 
-    async deletePerson(person:Person) {
+    async deletePerson(personDTO:PersonDTO) {
+        const person = this.dtoToPerson(personDTO);
         const deletePersonId = await this.personRepository.findPersonById(person.id);
         const deletePersonEmail =  await this.personRepository.findPersonByEmail(person.email);
 

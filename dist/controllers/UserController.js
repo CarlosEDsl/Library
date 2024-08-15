@@ -26,7 +26,6 @@ const tsoa_1 = require("tsoa");
 const UserDTO_1 = require("../models/dto/UserDTO");
 const UserService_1 = require("../services/UserService");
 const BasicResponseDTO_1 = require("../models/dto/BasicResponseDTO");
-const User_1 = require("../models/User");
 let UserController = class UserController extends tsoa_1.Controller {
     constructor() {
         super(...arguments);
@@ -57,7 +56,7 @@ let UserController = class UserController extends tsoa_1.Controller {
     deleteUser(user, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedUser = yield this.userService.deleteUser(user.id);
+                const deletedUser = yield this.userService.deleteUser(user);
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", deletedUser));
             }
             catch (err) {
@@ -79,7 +78,7 @@ let UserController = class UserController extends tsoa_1.Controller {
     findAllUsers(success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield this.userService.getAllUsers();
+                const users = yield this.userService.getAllUser();
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", users));
             }
             catch (err) {
@@ -104,7 +103,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [User_1.User, Function, Function]),
+    __metadata("design:paramtypes", [UserDTO_1.UserDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUser", null);
 __decorate([
@@ -113,7 +112,7 @@ __decorate([
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [User_1.User, Function, Function]),
+    __metadata("design:paramtypes", [UserDTO_1.UserDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "deleteUser", null);
 __decorate([
