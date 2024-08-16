@@ -70,7 +70,7 @@ export class LoanRepository {
         const query = 'SELECT * FROM Library.loan WHERE id = ?';
         try {
             const result = await executarComandoSQL(query, [id]);
-            return result;
+            return result[0];
         } catch (err) {
             console.error(err);
             throw err;

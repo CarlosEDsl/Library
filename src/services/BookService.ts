@@ -3,10 +3,12 @@ import { Book } from "../models/Book";
 import { BookDTO } from "../models/dto/BookDTO";
 import { BookRepository } from "../repositories/BookRepository";
 import { isEqual } from '../utils.ts/objectsUtils';
+import { LoanRepository } from '../repositories/LoanRepository';
 
 export class BookService {
     bookRepository = BookRepository.getInstance();
     categoryRepository = CategoryRepository.getInstance();
+    loanRepository = LoanRepository.getInstance();
 
     async registerBook(bookDTO:BookDTO) {
         const book = this.dtoToBook(bookDTO);
@@ -40,23 +42,37 @@ export class BookService {
 
     async deleteBook(bookDTO:BookDTO) {
         const book = this.dtoToBook(bookDTO);
+        book.id = bookDTO.id?? 0;
         const deleteBookId = await this.bookRepository.findBookById(book.id);
         const deleteBookName = await this.bookRepository.findBookByAuthorAndName(book.author, book.title);
 
-        console.log(deleteBookId, deleteBookName);
+        if(!deleteBookId)
+            throw new Error("This book don't exist");
 
         if(!isEqual(deleteBookId, deleteBookName))
             throw new Error("Book and BookId don't match");
+        try{
+            await this.referencesVerification(book.id);
+        }catch (err) {
+            throw err;
+        }
+
         return await this.bookRepository.deleteBook(book.id);
     }
 
     async findBook(id:number) {
         const book = await this.bookRepository.findBookById(id);
+        if(!book)
+            throw new Error("not found");
         return book;
     }
 
     async getAllBook(){
         return await this.bookRepository.findAllBooks();
+    }
+
+    async getBooksByCategory(categoryId:number) {
+        return await this.bookRepository.findAllBooksByCategory(categoryId);
     }
 
 
@@ -74,6 +90,13 @@ export class BookService {
         if(bookVerify)
             throw new Error("this book is already registered");
     }
+    
+    async referencesVerification(bookId:number) {
+        const loans = await this.loanRepository.findLoanByBookId(bookId);
+        if(loans.length > 0 )
+            throw new Error("this book still in some loans, please delete or update this loans to delete this book");
+    }
+
 
     dtoToBook(dto:BookDTO) {
         const book = new Book(dto.title, dto.author, dto.category_id, dto.id);

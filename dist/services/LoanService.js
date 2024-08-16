@@ -37,6 +37,7 @@ class LoanService {
     editLoan(loanDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const loan = this.dtoToLoan(loanDTO);
+            loan.id = loanDTO.id;
             if (!(yield this.loanRepository.findLoan(loan.id)))
                 throw new Error("this loan don't exist");
             try {
@@ -53,10 +54,12 @@ class LoanService {
     deleteLoan(loanDTO) {
         return __awaiter(this, void 0, void 0, function* () {
             const loan = this.dtoToLoan(loanDTO);
+            loan.id = loanDTO.id;
             const loanRemove = yield this.loanRepository.findLoan(loan.id);
             if (!loanRemove)
                 throw new Error("this loan don't exist");
-            if (loanRemove.bookId != loan.bookId || loanRemove.loanDate != loan.loanDate || loanRemove.returnDate != loan.returnDate
+            if (loanRemove.bookId != loan.bookId || loanRemove.loanDate.getTime() != loan.loanDate.getTime()
+                || loanRemove.returnDate.getTime() != loan.returnDate.getTime()
                 || loanRemove.userId != loan.userId)
                 throw new Error("data to remove don't match with id: " + loan.id);
             return yield this.loanRepository.deleteLoan(loan.id);
@@ -65,17 +68,38 @@ class LoanService {
     findLoan(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const loan = yield this.loanRepository.findLoan(id);
+            if (!loan)
+                throw new Error("not found");
             return loan;
         });
     }
     getAllFromBook(bookId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.loanRepository.findLoanByBookId(bookId);
+            const loans = yield this.loanRepository.findLoanByBookId(bookId);
+            if (loans.length <= 0) {
+                throw new Error("don't have loans with this book");
+            }
+            try {
+                this.bookVerifier(bookId);
+            }
+            catch (err) {
+                throw err;
+            }
+            return loans;
         });
     }
     getAllFromUser(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.loanRepository.findLoanByUserId(userId);
+            const loans = yield this.loanRepository.findLoanByUserId(userId);
+            if (loans.length <= 0)
+                throw new Error("this user don't have loans");
+            try {
+                yield this.userVerifier(userId);
+            }
+            catch (err) {
+                throw err;
+            }
+            return loans;
         });
     }
     getAllLoan() {

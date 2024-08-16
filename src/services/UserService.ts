@@ -1,5 +1,6 @@
 import { UserDTO } from "../models/dto/UserDTO";
 import { User } from "../models/User";
+import { LoanRepository } from "../repositories/LoanRepository";
 import { PersonRepository } from "../repositories/PersonRepository";
 import { UserRepository } from "../repositories/UserRepository";
 
@@ -7,6 +8,7 @@ export class UserService {
 
     userRepository:UserRepository = UserRepository.getInstance();
     personRepository:PersonRepository = PersonRepository.getInstance();
+    loanRepository:LoanRepository = LoanRepository.getInstance();
 
     async registerUser(userDTO:UserDTO) {
         const user = this.dtoToUser(userDTO);
@@ -43,6 +45,8 @@ export class UserService {
 
     async findUser(id:number) {
         const user = await this.userRepository.findUser(id);
+        if(!user)
+            throw new Error("not found");
         return user;
     }
 
@@ -63,6 +67,12 @@ export class UserService {
             throw new Error("this person don't exist");
         if(await this.userRepository.findUserByPersonId(personId) != null)
             throw new Error("this person already have an user");   
+    }
+
+    async referencesVerification(userId:number) {
+        const loans = await this.loanRepository.findLoanByUserId(userId);
+        if(loans.length > 0 )
+            throw new Error("There is books with this category yet, update then before delete this category");
     }
 
     dtoToUser(dto:UserDTO) {

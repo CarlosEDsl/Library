@@ -70,7 +70,7 @@ const models = {
     "CategoryDTO": {
         "dataType": "refObject",
         "properties": {
-            "id": { "dataType": "double", "required": true },
+            "id": { "dataType": "double" },
             "name": { "dataType": "string", "required": true },
         },
         "additionalProperties": false,
@@ -390,10 +390,9 @@ function RegisterRoutes(app) {
         });
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.put('/loans/:id', ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController)), ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController.prototype.updateLoan)), function LoanController_updateLoan(request, response, next) {
+    app.put('/loans', ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController)), ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController.prototype.updateLoan)), function LoanController_updateLoan(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = {
-                id: { "in": "path", "name": "id", "required": true, "dataType": "double" },
                 loan: { "in": "body", "name": "loan", "required": true, "ref": "LoanDTO" },
                 success: { "in": "res", "name": "200", "required": true, "ref": "BasicResponseDto" },
                 fail: { "in": "res", "name": "404", "required": true, "ref": "BasicResponseDto" },
@@ -445,7 +444,7 @@ function RegisterRoutes(app) {
         });
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/loans/:id', ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController)), ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController.prototype.findLoan)), function LoanController_findLoan(request, response, next) {
+    app.get('/loans/id/:id', ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController)), ...((0, runtime_1.fetchMiddlewares)(LoanController_1.LoanController.prototype.findLoan)), function LoanController_findLoan(request, response, next) {
         return __awaiter(this, void 0, void 0, function* () {
             const args = {
                 id: { "in": "path", "name": "id", "required": true, "dataType": "double" },

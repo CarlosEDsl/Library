@@ -49,18 +49,18 @@ let CategoryController = class CategoryController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfull updated", updatedCategory));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update", undefined));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update " + err, undefined));
             }
         });
     }
     deleteCategory(category, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const deletedCategory = yield this.categoryService.deleteCategory(category);
-                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfull deleted", deletedCategory));
+                yield this.categoryService.deleteCategory(category);
+                return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfull deleted", null));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error on delete", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error on delete" + err, undefined));
             }
         });
     }
@@ -71,7 +71,7 @@ let CategoryController = class CategoryController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfull found", category));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error on search", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error on search " + err, undefined));
             }
         });
     }
@@ -82,7 +82,7 @@ let CategoryController = class CategoryController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfull found", category));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error on search", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error on search " + err, undefined));
             }
         });
     }

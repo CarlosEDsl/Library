@@ -33,7 +33,7 @@ export class CategoryController extends Controller{
             const updatedCategory = await this.categoryService.editCategory(category);
             return success(200, new BasicResponseDto("Successfull updated", updatedCategory));
         } catch(err) {
-            return fail(404, new BasicResponseDto("Failed to update", undefined));
+            return fail(404, new BasicResponseDto("Failed to update " + err, undefined));
         }
     }
 
@@ -44,10 +44,10 @@ export class CategoryController extends Controller{
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise< | void> {
         try {
-            const deletedCategory = await this.categoryService.deleteCategory(category);
-            return success(200, new BasicResponseDto("Successfull deleted", deletedCategory));
+            await this.categoryService.deleteCategory(category);
+            return success(200, new BasicResponseDto("Successfull deleted", null));
         } catch(err) {
-            return fail(404, new BasicResponseDto("error on delete", err))
+            return fail(404, new BasicResponseDto("error on delete" + err, undefined))
         }
     }
 
@@ -61,7 +61,7 @@ export class CategoryController extends Controller{
             const category = await this.categoryService.findCategory(id);
             return success(200, new BasicResponseDto("Successfull found", category));
         } catch(err) {
-            return fail(404, new BasicResponseDto("error on search", err))
+            return fail(404, new BasicResponseDto("error on search " + err, undefined))
         }
     }
 
@@ -74,7 +74,7 @@ export class CategoryController extends Controller{
             const category = await this.categoryService.getAllCategories();
             return success(200, new BasicResponseDto("Successfull found", category));
         } catch(err) {
-            return fail(404, new BasicResponseDto("error on search", err))
+            return fail(404, new BasicResponseDto("error on search " + err, undefined))
         }
     }
 }   

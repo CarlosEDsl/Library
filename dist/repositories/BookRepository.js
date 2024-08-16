@@ -117,5 +117,18 @@ class BookRepository {
             }
         });
     }
+    findAllBooksByCategory(categoryId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = 'SELECT * FROM Library.book WHERE categoryId = ?';
+            try {
+                const result = yield (0, mysql_1.executarComandoSQL)(query, [categoryId]);
+                return result;
+            }
+            catch (err) {
+                console.error(err);
+                throw err;
+            }
+        });
+    }
 }
 exports.BookRepository = BookRepository;

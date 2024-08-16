@@ -42,15 +42,14 @@ let LoanController = class LoanController extends tsoa_1.Controller {
             }
         });
     }
-    updateLoan(id, loan, success, fail) {
+    updateLoan(loan, success, fail) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                loan.id = id;
                 const updatedLoan = yield this.loanService.editLoan(loan);
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully updated", updatedLoan));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update", undefined));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Failed to update " + err, undefined));
             }
         });
     }
@@ -61,7 +60,7 @@ let LoanController = class LoanController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully deleted", undefined));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on delete", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on delete " + err, undefined));
             }
         });
     }
@@ -72,7 +71,7 @@ let LoanController = class LoanController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", loan));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search " + err, undefined));
             }
         });
     }
@@ -83,7 +82,7 @@ let LoanController = class LoanController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("Successfully found", loans));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("Error on search" + err, undefined));
             }
         });
     }
@@ -94,7 +93,7 @@ let LoanController = class LoanController extends tsoa_1.Controller {
                 return success(200, new BasicResponseDTO_1.BasicResponseDto("all loans from this book", loans));
             }
             catch (err) {
-                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error: ", err));
+                return fail(404, new BasicResponseDTO_1.BasicResponseDto("error: " + err, undefined));
             }
         });
     }
@@ -110,13 +109,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LoanController.prototype, "createLoan", null);
 __decorate([
-    (0, tsoa_1.Put)("{id}"),
-    __param(0, (0, tsoa_1.Path)()),
-    __param(1, (0, tsoa_1.Body)()),
+    (0, tsoa_1.Put)(),
+    __param(0, (0, tsoa_1.Body)()),
+    __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),
-    __param(3, (0, tsoa_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, LoanDTO_1.LoanDTO, Function, Function]),
+    __metadata("design:paramtypes", [LoanDTO_1.LoanDTO, Function, Function]),
     __metadata("design:returntype", Promise)
 ], LoanController.prototype, "updateLoan", null);
 __decorate([
@@ -129,7 +127,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], LoanController.prototype, "deleteLoan", null);
 __decorate([
-    (0, tsoa_1.Get)("{id}"),
+    (0, tsoa_1.Get)("id/{id}"),
     __param(0, (0, tsoa_1.Path)()),
     __param(1, (0, tsoa_1.Res)()),
     __param(2, (0, tsoa_1.Res)()),

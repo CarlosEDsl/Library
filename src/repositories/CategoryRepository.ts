@@ -47,20 +47,17 @@ export class CategoryRepository {
         try{
             const result = await executarComandoSQL(query, [category.name, category.id]);
             return new Promise((resolve) => {
-                resolve(result);
+                resolve(category);
             })
         } catch(err) {
             throw err;
         }
     }
 
-    async deleteCategory(category:Category): Promise<Category> {
+    async deleteCategory(category:Category) {
         const query = 'DELETE FROM Library.category where id = ?';
         try {
             const result = await executarComandoSQL(query, [category.id]);
-            return new Promise((resolve) => {
-                resolve(result);
-            })
         } catch(err) {
             throw err
         }

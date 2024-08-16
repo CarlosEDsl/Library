@@ -11,12 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const User_1 = require("../models/User");
+const LoanRepository_1 = require("../repositories/LoanRepository");
 const PersonRepository_1 = require("../repositories/PersonRepository");
 const UserRepository_1 = require("../repositories/UserRepository");
 class UserService {
     constructor() {
         this.userRepository = UserRepository_1.UserRepository.getInstance();
         this.personRepository = PersonRepository_1.PersonRepository.getInstance();
+        this.loanRepository = LoanRepository_1.LoanRepository.getInstance();
     }
     registerUser(userDTO) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,6 +62,8 @@ class UserService {
     findUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.userRepository.findUser(id);
+            if (!user)
+                throw new Error("not found");
             return user;
         });
     }
@@ -81,6 +85,13 @@ class UserService {
                 throw new Error("this person don't exist");
             if ((yield this.userRepository.findUserByPersonId(personId)) != null)
                 throw new Error("this person already have an user");
+        });
+    }
+    referencesVerification(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const loans = yield this.loanRepository.findLoanByUserId(userId);
+            if (loans.length > 0)
+                throw new Error("There is books with this category yet, update then before delete this category");
         });
     }
     dtoToUser(dto) {

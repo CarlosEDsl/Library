@@ -58,7 +58,7 @@ class CategoryRepository {
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [category.name, category.id]);
                 return new Promise((resolve) => {
-                    resolve(result);
+                    resolve(category);
                 });
             }
             catch (err) {
@@ -71,9 +71,6 @@ class CategoryRepository {
             const query = 'DELETE FROM Library.category where id = ?';
             try {
                 const result = yield (0, mysql_1.executarComandoSQL)(query, [category.id]);
-                return new Promise((resolve) => {
-                    resolve(result);
-                });
             }
             catch (err) {
                 throw err;

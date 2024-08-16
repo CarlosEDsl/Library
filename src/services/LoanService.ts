@@ -24,6 +24,7 @@ export class LoanService {
 
     async editLoan(loanDTO:LoanDTO) {
         const loan = this.dtoToLoan(loanDTO);
+        loan.id = loanDTO.id;
         if(!await this.loanRepository.findLoan(loan.id)) throw new Error("this loan don't exist");
         try {
             await this.bookVerifier(loan.bookId);
@@ -38,10 +39,12 @@ export class LoanService {
 
     async deleteLoan(loanDTO:LoanDTO) {
         const loan = this.dtoToLoan(loanDTO);
+        loan.id = loanDTO.id;
         const loanRemove = await this.loanRepository.findLoan(loan.id);
         if(!loanRemove)
             throw new Error("this loan don't exist");
-        if(loanRemove.bookId != loan.bookId || loanRemove.loanDate != loan.loanDate || loanRemove.returnDate != loan.returnDate 
+        if(loanRemove.bookId != loan.bookId || loanRemove.loanDate.getTime() != loan.loanDate.getTime()
+            || loanRemove.returnDate.getTime() != loan.returnDate.getTime() 
             || loanRemove.userId != loan.userId)
             throw new Error("data to remove don't match with id: " + loan.id);
         return await this.loanRepository.deleteLoan(loan.id);
@@ -49,15 +52,34 @@ export class LoanService {
 
     async findLoan(id:number) {
         const loan = await this.loanRepository.findLoan(id);
+        if(!loan)
+            throw new Error("not found");
         return loan;
     }
 
     async getAllFromBook(bookId:number) {
-        return await this.loanRepository.findLoanByBookId(bookId);
+        const loans = await this.loanRepository.findLoanByBookId(bookId);
+        if(loans.length <= 0) {
+            throw new Error("don't have loans with this book");
+        }
+        try{
+            this.bookVerifier(bookId);
+        } catch(err){
+            throw err;
+        }
+        return loans;
     }
 
     async getAllFromUser(userId:number) {
-        return await this.loanRepository.findLoanByUserId(userId);
+        const loans = await this.loanRepository.findLoanByUserId(userId);
+        if(loans.length <= 0 )
+            throw new Error("this user don't have loans");
+        try{
+            await this.userVerifier(userId);
+        } catch(err) {
+            throw err;
+        }
+        return loans;
     }
 
     async getAllLoan() {

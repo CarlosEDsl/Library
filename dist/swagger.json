@@ -107,7 +107,6 @@
 					}
 				},
 				"required": [
-					"id",
 					"name"
 				],
 				"type": "object",
@@ -609,9 +608,7 @@
 						}
 					}
 				}
-			}
-		},
-		"/loans/{id}": {
+			},
 			"put": {
 				"operationId": "UpdateLoan",
 				"responses": {
@@ -643,17 +640,7 @@
 					"Loan"
 				],
 				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"format": "double",
-							"type": "number"
-						}
-					}
-				],
+				"parameters": [],
 				"requestBody": {
 					"required": true,
 					"content": {
@@ -664,7 +651,9 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/loans/{id}": {
 			"delete": {
 				"operationId": "DeleteLoan",
 				"responses": {
@@ -707,7 +696,9 @@
 						}
 					}
 				}
-			},
+			}
+		},
+		"/loans/id/{id}": {
 			"get": {
 				"operationId": "FindLoan",
 				"responses": {

@@ -10,11 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PersonService = void 0;
+const UserRepository_1 = require("./../repositories/UserRepository");
 const Person_1 = require("../models/Person");
 const PersonRepository_1 = require("../repositories/PersonRepository");
 class PersonService {
     constructor() {
         this.personRepository = PersonRepository_1.PersonRepository.getInstance();
+        this.userRepository = UserRepository_1.UserRepository.getInstance();
     }
     registerPerson(personDTO) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -51,8 +53,17 @@ class PersonService {
             const person = this.dtoToPerson(personDTO);
             const deletePersonId = yield this.personRepository.findPersonById(person.id);
             const deletePersonEmail = yield this.personRepository.findPersonByEmail(person.email);
-            if (deletePersonId != deletePersonEmail) {
-                throw new Error("Email and ID don't match");
+            try {
+                if (!deletePersonId) {
+                    throw new Error("this person don't exist");
+                }
+                this.referencesVerification(person.id);
+                if (deletePersonId != deletePersonEmail) {
+                    throw new Error("Email and ID don't match");
+                }
+            }
+            catch (err) {
+                throw err;
             }
             return yield this.personRepository.deletePerson(person.id);
         });
@@ -60,6 +71,8 @@ class PersonService {
     findPerson(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const person = yield this.personRepository.findPersonById(id);
+            if (!person)
+                throw new Error("not found");
             return person;
         });
     }
@@ -73,6 +86,13 @@ class PersonService {
             if (yield this.personRepository.findPersonByEmail(email)) {
                 throw new Error("email already in use");
             }
+        });
+    }
+    referencesVerification(personId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.userRepository.findUserByPersonId(personId);
+            if (user)
+                throw new Error("This person still associated with a user, delete or update user before deleting person");
         });
     }
     dtoToPerson(dto) {

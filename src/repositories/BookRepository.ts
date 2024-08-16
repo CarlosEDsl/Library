@@ -96,4 +96,15 @@ export class BookRepository {
             throw err;
         }
     }
+
+    async findAllBooksByCategory(categoryId:number): Promise<Book[]> {
+        const query = 'SELECT * FROM Library.book WHERE categoryId = ?';
+        try {
+            const result = await executarComandoSQL(query, [categoryId]);
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
 }

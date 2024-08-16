@@ -23,19 +23,17 @@ export class LoanController extends Controller {
         }
     }
 
-    @Put("{id}")
+    @Put()
     async updateLoan(
-        @Path() id: number,
         @Body() loan: LoanDTO,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
         @Res() fail: TsoaResponse<404, BasicResponseDto>
     ): Promise<void> {
         try {
-            loan.id = id;
             const updatedLoan = await this.loanService.editLoan(loan);
             return success(200, new BasicResponseDto("Successfully updated", updatedLoan));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Failed to update", undefined));
+            return fail(404, new BasicResponseDto("Failed to update " + err, undefined));
         }
     }
 
@@ -49,11 +47,11 @@ export class LoanController extends Controller {
             await this.loanService.deleteLoan(loan);
             return success(200, new BasicResponseDto("Successfully deleted", undefined));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Error on delete", err));
+            return fail(404, new BasicResponseDto("Error on delete " + err, undefined));
         }
     }
 
-    @Get("{id}")
+    @Get("id/{id}")
     async findLoan(
         @Path() id: number,
         @Res() success: TsoaResponse<200, BasicResponseDto>,
@@ -63,7 +61,7 @@ export class LoanController extends Controller {
             const loan = await this.loanService.findLoan(id);
             return success(200, new BasicResponseDto("Successfully found", loan));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Error on search", err));
+            return fail(404, new BasicResponseDto("Error on search " + err, undefined));
         }
     }
 
@@ -76,7 +74,7 @@ export class LoanController extends Controller {
             const loans = await this.loanService.getAllLoan();
             return success(200, new BasicResponseDto("Successfully found", loans));
         } catch (err) {
-            return fail(404, new BasicResponseDto("Error on search", err));
+            return fail(404, new BasicResponseDto("Error on search" + err, undefined));
         }
     }
 
@@ -90,7 +88,7 @@ export class LoanController extends Controller {
             const loans = await this.loanService.getAllFromBook(id);
             return success(200, new BasicResponseDto("all loans from this book", loans));
         } catch(err) {
-            return fail(404, new BasicResponseDto("error: ", err));
+            return fail(404, new BasicResponseDto("error: " + err, undefined));
         }
     }
 }

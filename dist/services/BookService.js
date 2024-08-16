@@ -14,10 +14,12 @@ const CategoryRepository_1 = require("./../repositories/CategoryRepository");
 const Book_1 = require("../models/Book");
 const BookRepository_1 = require("../repositories/BookRepository");
 const objectsUtils_1 = require("../utils.ts/objectsUtils");
+const LoanRepository_1 = require("../repositories/LoanRepository");
 class BookService {
     constructor() {
         this.bookRepository = BookRepository_1.BookRepository.getInstance();
         this.categoryRepository = CategoryRepository_1.CategoryRepository.getInstance();
+        this.loanRepository = LoanRepository_1.LoanRepository.getInstance();
     }
     registerBook(bookDTO) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -53,24 +55,40 @@ class BookService {
     }
     deleteBook(bookDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const book = this.dtoToBook(bookDTO);
+            book.id = (_a = bookDTO.id) !== null && _a !== void 0 ? _a : 0;
             const deleteBookId = yield this.bookRepository.findBookById(book.id);
             const deleteBookName = yield this.bookRepository.findBookByAuthorAndName(book.author, book.title);
-            console.log(deleteBookId, deleteBookName);
-            if (!(0, objectsUtils_1.isEqual)(deleteBookId, deleteBookName))
-                throw new Error("Book and BookId don't match");
+            try {
+                if (!deleteBookId)
+                    throw new Error("This book don't exist");
+                if (!(0, objectsUtils_1.isEqual)(deleteBookId, deleteBookName))
+                    throw new Error("Book and BookId don't match");
+                yield this.referencesVerification(book.id);
+            }
+            catch (err) {
+                throw err;
+            }
             return yield this.bookRepository.deleteBook(book.id);
         });
     }
     findBook(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const book = yield this.bookRepository.findBookById(id);
+            if (!book)
+                throw new Error("not found");
             return book;
         });
     }
     getAllBook() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.bookRepository.findAllBooks();
+        });
+    }
+    getBooksByCategory(categoryId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.bookRepository.findAllBooksByCategory(categoryId);
         });
     }
     //Verifications
@@ -86,6 +104,13 @@ class BookService {
             const bookVerify = yield this.bookRepository.findBookByAuthorAndName(book.author, book.title);
             if (bookVerify)
                 throw new Error("this book is already registered");
+        });
+    }
+    referencesVerification(bookId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const loans = yield this.loanRepository.findLoanByBookId(bookId);
+            if (loans.length > 0)
+                throw new Error("this book still in some loans, please delete or update this loans to delete this book");
         });
     }
     dtoToBook(dto) {

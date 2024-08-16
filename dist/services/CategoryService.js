@@ -12,9 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryService = void 0;
 const Category_1 = require("../models/Category");
 const CategoryRepository_1 = require("../repositories/CategoryRepository");
+const BookRepository_1 = require("../repositories/BookRepository");
 class CategoryService {
     constructor() {
         this.categoryRepository = CategoryRepository_1.CategoryRepository.getInstance();
+        this.bookRepository = BookRepository_1.BookRepository.getInstance();
     }
     registerCategory(categoryDTO) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +33,9 @@ class CategoryService {
     }
     editCategory(categoryDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const category = this.dtoToCategory(categoryDTO);
+            category.id = (_a = categoryDTO.id) !== null && _a !== void 0 ? _a : 0;
             try {
                 yield this.nameVerification(category.name);
             }
@@ -44,14 +48,30 @@ class CategoryService {
     }
     deleteCategory(categoryDTO) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const category = this.dtoToCategory(categoryDTO);
-            const removedCategory = yield this.categoryRepository.deleteCategory(category);
-            return removedCategory;
+            category.id = (_a = categoryDTO.id) !== null && _a !== void 0 ? _a : 0;
+            const categoryFoundById = yield this.categoryRepository.findCategoryById(category.id);
+            if (!(categoryFoundById)) {
+                throw new Error("this category don't exist");
+            }
+            if (categoryFoundById.name != category.name) {
+                throw new Error("name and id dont match");
+            }
+            try {
+                yield this.referencesVerification(category);
+            }
+            catch (err) {
+                throw err;
+            }
+            yield this.categoryRepository.deleteCategory(category);
         });
     }
     findCategory(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const category = yield this.categoryRepository.findCategoryById(id);
+            if (!category)
+                throw new Error("not found");
             return category;
         });
     }
@@ -60,10 +80,18 @@ class CategoryService {
             return yield this.categoryRepository.findAllCategories();
         });
     }
+    //Verifications
     nameVerification(name) {
         return __awaiter(this, void 0, void 0, function* () {
             if ((yield this.categoryRepository.findCategoryByName(name)) != null)
                 throw new Error("this category already exist");
+        });
+    }
+    referencesVerification(category) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const books = yield this.bookRepository.findAllBooksByCategory(category.id);
+            if (books.length > 0)
+                throw new Error("There is books with this category yet, update then before delete this category");
         });
     }
     dtoToCategory(dto) {
