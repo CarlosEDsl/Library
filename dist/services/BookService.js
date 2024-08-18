@@ -60,11 +60,11 @@ class BookService {
             book.id = (_a = bookDTO.id) !== null && _a !== void 0 ? _a : 0;
             const deleteBookId = yield this.bookRepository.findBookById(book.id);
             const deleteBookName = yield this.bookRepository.findBookByAuthorAndName(book.author, book.title);
+            if (!deleteBookId)
+                throw new Error("This book don't exist");
+            if (!(0, objectsUtils_1.isEqual)(deleteBookId, deleteBookName))
+                throw new Error("Book and BookId don't match");
             try {
-                if (!deleteBookId)
-                    throw new Error("This book don't exist");
-                if (!(0, objectsUtils_1.isEqual)(deleteBookId, deleteBookName))
-                    throw new Error("Book and BookId don't match");
                 yield this.referencesVerification(book.id);
             }
             catch (err) {

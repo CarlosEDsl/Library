@@ -90,6 +90,11 @@ export class LoanService {
         if(loan.loanDate.getTime() > loan.returnDate.getTime()){
             throw new Error("You can't make the returnDate before the loanDate")
         }
+        const loans = await this.loanRepository.findLoanByBookId(loan.bookId);
+        const alreadyInUse = loans.some(l => loan.loanDate.getTime() < l.returnDate.getTime());
+
+        if(alreadyInUse)
+            throw new Error("this book is already in use in this loanDate");
     }
 
     async userVerifier(userId:number) {

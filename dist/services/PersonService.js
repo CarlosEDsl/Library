@@ -36,7 +36,6 @@ class PersonService {
             const person = this.dtoToPerson(personDTO);
             person.id = (_a = personDTO.id) !== null && _a !== void 0 ? _a : 0;
             try {
-                console.log(yield this.personRepository.findPersonById(person.id));
                 if (!(yield this.personRepository.findPersonById(person.id)))
                     throw new Error(`id: ${person.id} don't exist in persons`);
                 if ((yield this.personRepository.findPersonById(person.id)).email != person.email)
@@ -53,17 +52,17 @@ class PersonService {
             const person = this.dtoToPerson(personDTO);
             const deletePersonId = yield this.personRepository.findPersonById(person.id);
             const deletePersonEmail = yield this.personRepository.findPersonByEmail(person.email);
+            if (!deletePersonId) {
+                throw new Error("this person don't exist");
+            }
             try {
-                if (!deletePersonId) {
-                    throw new Error("this person don't exist");
-                }
                 this.referencesVerification(person.id);
-                if (deletePersonId != deletePersonEmail) {
-                    throw new Error("Email and ID don't match");
-                }
             }
             catch (err) {
                 throw err;
+            }
+            if (deletePersonId != deletePersonEmail) {
+                throw new Error("Email and ID don't match");
             }
             return yield this.personRepository.deletePerson(person.id);
         });
