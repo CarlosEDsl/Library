@@ -1,5 +1,5 @@
 export class LoanDTO {
-    id:number;
+    id?:number;
     bookId:number;
     userId:number;
     loanDate:Date;

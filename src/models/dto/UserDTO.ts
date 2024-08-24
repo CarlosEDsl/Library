@@ -1,5 +1,5 @@
 export class UserDTO{
-    id:number;
+    id?:number;
     personId: number;
     password: string;
 

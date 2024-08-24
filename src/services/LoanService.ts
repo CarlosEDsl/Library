@@ -24,7 +24,7 @@ export class LoanService {
 
     async editLoan(loanDTO:LoanDTO) {
         const loan = this.dtoToLoan(loanDTO);
-        loan.id = loanDTO.id;
+        loan.id = loanDTO.id || 0;
         if(!await this.loanRepository.findLoan(loan.id)) throw new Error("this loan don't exist");
         try {
             await this.bookVerifier(loan.bookId);
@@ -39,7 +39,7 @@ export class LoanService {
 
     async deleteLoan(loanDTO:LoanDTO) {
         const loan = this.dtoToLoan(loanDTO);
-        loan.id = loanDTO.id;
+        loan.id = loanDTO.id || 0;
         const loanRemove = await this.loanRepository.findLoan(loan.id);
         if(!loanRemove)
             throw new Error("this loan don't exist");
